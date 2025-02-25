@@ -1,18 +1,18 @@
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #181818; 
-    padding: 15px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000; 
-  }
-  
-  .audio-player {
-    width: 100%;
-    max-width: 1000px;
-  }
-  
+/* Footer.module.css */
+
+.footerContainer {
+  background-color: #222; 
+  color: #ccc;         
+  font-size: 0.9rem;   
+  padding: 20px;
+  line-height: 1.4;
+}
+
+.companyInfo {
+  max-width: 1200px;    
+  margin: 0 auto;
+}
+
+.companyInfo p {
+  margin: 0.3rem 0;      
+}

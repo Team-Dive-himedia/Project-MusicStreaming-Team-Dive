@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.container {
+  max-width: 1080px;
+  margin: 40px auto;
+  padding: 40px;
+  background: #000; /* 전체 배경 검정 */
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+  font-family: 'Roboto', sans-serif;
+}
+
+.loading {
+  text-align: center;
+  font-size: 24px;
+  padding: 50px;
+}
+
+/* 앨범 상단 */
+.albumHeader {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 20px;
+}
+
+.cover {
+  width: 220px;
+  min-width: 220px;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+}
+.albumImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.albumTitle {
+  font-size: 32px;
+  margin: 0;
+  color: #fff;
+}
+
+.artistName {
+  font-size: 18px;
+  color: #ccc;
+}
+
+.albumMeta {
+  font-size: 14px;
+  color: #888;
+}
+
+.divider {
+  margin: 0 6px;
+  color: #444;
+}
+
+/* 버튼 그룹 */
+.buttonGroup {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+.playButton,
+.likeButton,
+.moreButton {
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+}
+
+/* 재생 버튼 */
+.playButton {
+  background-color: #e00808;
+  color: #fff;
+}
+.playButton:hover {
+  background-color: #ff1c1c;
+}
+
+/* 좋아요 버튼 */
+.likeButton {
+  background-color: #333;
+  color: #fff;
+}
+.likeButton:hover {
+  background-color: #444;
+}
+.liked {
+  background-color: #333;
+  color: #fff;
+}
+
+/* 더보기 버튼 */
+.moreButton {
+  background-color: #444;
+  color: #fff;
+}
+.moreButton:hover {
+  background-color: #555;
+}
+
+/* 수록곡 목록 */
+.trackListSection {
+  margin-top: 20px;
+}
+
+.trackTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.trackTable thead {
+  border-bottom: 1px solid #333;
+}
+.trackTable th {
+  font-size: 14px;
+  text-align: left;
+  color: #888;
+  padding: 12px;
+}
+
+/* 각 컬럼별 너비나 스타일 조정 */
+.thNumber {
+  width: 40px;
+}
+.thTitle {
+  width: 40%;
+}
+.thArtist {
+  width: 25%;
+}
+.thActions {
+  width: 25%;
+}
+
+.trackTable td {
+  padding: 12px;
+  border-bottom: 1px solid #333;
+  color: #ccc;
+  vertical-align: middle;
+}
+
+/* 마우스오버 효과 */
+.trackRow {
+  transition: background-color 0.2s;
+}
+.trackRow:hover {
+  background-color: #111;
+}
+
+/* 액션 아이콘(버튼)들 */
+.actionIcons {
+  display: flex;
+  gap: 10px;
+}
+
+.iconButton {
+  background: none;
+  border: 1px solid #555;
+  color: #999;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.iconButton:hover {
+  background: #222;
+  color: #fff;
+}
+
+
+/* 댓글 영역 */
+.commentsSection {
+  margin-bottom: 40px;
+}
+
+.commentsSection h2 {
+  font-size: 28px;
+  border-bottom: 2px solid #767373;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.commentInput {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #2a2a2a;
+  color: #fff;
+  margin-bottom: 10px;
+  resize: vertical;
+}
+
+.submitButton {
+  align-self: flex-end;
+  background: black;
+  border: 1px solid #444;
+  color: rgb(175, 170, 170);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submitButton:hover {
+  background: white;
+  color: black;
+}
+
+.commentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.commentItem {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.commentAuthor {
+  font-weight: bold;
+  margin: 0 0 5px;
+}
+
+.commentContent {
+  margin: 0 0 5px;
+}
+
+.commentDate {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.commentLike {
+  font-size: 12px;
+  color: #ff4081;
+  margin-left: 10px;
+}
+

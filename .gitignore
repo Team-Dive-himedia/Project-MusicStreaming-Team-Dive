@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/static/profileImage/
+/src/main/webapp/profileImage/스크린샷(1)1739438125800.png
