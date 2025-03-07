@@ -74,23 +74,37 @@
   background-color: #3f3f3f;
   border: none;
   color: #ffffff;
-  padding: 6px 10px;
+  padding: 8px 10px;  /* 버튼 크기 조정 */
   margin-right: 6px;
-  border-radius: 4px;
+  border-radius: 6px;  /* 둥글게 */
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;  /* 부드러운 효과 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;  /* 버튼 크기 통일 */
+  height: 36px;
 }
 
 .optionBtn:hover {
-  background-color: #5f5f5f;
+  background-color: #ff4f79;
+  transform: scale(1.1); /* 호버 시 살짝 확대 */
 }
 
 /* 커스텀 체크박스 스타일 */
 .customCheckbox {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   cursor: pointer;
-  line-height: 16px;
-  user-select: none;
+  width: 20px;  /* 크기 키움 */
+  height: 20px;
+}
+
+
+.MuiTooltip-tooltip {
+  margin-bottom: 6px !important;
 }
 
 /* 실제 input은 숨기기 */

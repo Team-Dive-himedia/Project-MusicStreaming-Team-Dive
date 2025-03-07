@@ -7,13 +7,6 @@
   min-height: 100vh;
   
 }
-/* mainPage.module.css 예시 */
-.noMusicMessage {
-  text-align: center;
-  margin: 80px 0;
-  color: #888;
-  font-size: 1.2rem;
-}
 
 
 
@@ -557,6 +550,12 @@
 
 
 
+.noMusicMessage {
+  text-align: center;
+  margin: 80px 0;
+  color: #888;
+  font-size: 1.2rem;
+}
 
 
 

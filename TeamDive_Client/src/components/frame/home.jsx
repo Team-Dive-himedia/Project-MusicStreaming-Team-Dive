@@ -67,7 +67,7 @@ function Home({ menubar, mood, setMood}) {
                                 <div className={styles.userDetails}>
                                     <span className={styles.nickname}>{loginUser.nickname}</span>
                                     &nbsp;&nbsp;
-                                    <span className={styles.memberId}>({loginUser.memberId})</span>
+                                    <span className={styles.memberId}>{loginUser.memberId}</span>
                                 </div>
                                     <button onClick={onLogout} className={styles.logoutButton}>로그아웃</button>
                                 </div>

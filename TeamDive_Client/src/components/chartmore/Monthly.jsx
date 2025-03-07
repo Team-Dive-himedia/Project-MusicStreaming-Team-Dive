@@ -10,6 +10,13 @@ import styles from "../../css/chartMore.module.css";
 import { PlayerContext } from "../../context/PlayerContext";
 import PlaylistSelectModal from "../detail/PlaylistSectionModal";
 
+import { Tooltip } from '@mui/material';
+/* 아이콘 */
+import { MdLibraryMusic } from "react-icons/md";
+import { BsFileEarmarkMusicFill } from "react-icons/bs";
+import { FaPlay } from "react-icons/fa";
+import { MdQueueMusic } from "react-icons/md";
+
 const Monthly = () => {
   const loginUser = useSelector(state => state.user);
   const navigate = useNavigate();
@@ -172,37 +179,34 @@ const Monthly = () => {
                 <td onClick={()=>{navigate(`/music/${music.music.musicId}`)}} style={{cursor: "pointer"}}>{music.music.title}</td>
                 <td onClick={()=>{navigate(`/artist/${music.music.artistId}`)}} style={{cursor: "pointer"}}>{music.music.artistName}</td>
                 <td>
-                  <button
-                    className={styles.optionBtn}
-                    onClick={() => handlePlay(music.music.musicId)}
-                  >
-                    듣기
-                  </button>
+                    <Tooltip title="듣기" arrow placement="top">
+                        <button className={styles.optionBtn} onClick={() => { handlePlay(music.music.musicId) }}>
+                            <FaPlay size={16} />
+                        </button>
+                    </Tooltip>
                 </td>
                 <td>
-                  <button
-                    className={styles.optionBtn}
-                    onClick={() => handlePlay2(music.music.musicId)}
-                  >
-                    추가
-                  </button>
+                    <Tooltip title="재생목록에 추가" arrow placement="top">
+                        <button className={styles.optionBtn} onClick={() => { handlePlay2(music.music.musicId) }}>
+                            <MdQueueMusic size={22} />
+                        </button>
+                    </Tooltip>
                 </td>
                 <td>
-                  <button
-                    className={styles.optionBtn}
-                    onClick={() => handleAddToPlaylist(music.music.musicId)}
-                  >
-                    플레이리스트
-                  </button>
+                    <Tooltip title="플레이리스트에 담기" arrow placement="top">
+                        <button className={styles.optionBtn} onClick={() => handleAddToPlaylist(music.music.musicId)}>
+                            <MdLibraryMusic size={20} />
+                        </button>
+                    </Tooltip>
                 </td>
                 <td>
-                  <button
-                    className={styles.optionBtn}
-                    onClick={() => insertCart(music.music.musicId)}
-                  >
-                    구매
-                  </button>
+                    <Tooltip title="MP3 구매" arrow placement="top">
+                        <button className={styles.optionBtn} onClick={() => insertCart(music.music.musicId)}>
+                            <BsFileEarmarkMusicFill size={18} />
+                        </button>
+                    </Tooltip>
                 </td>
+
               </tr>
             );
           })}
