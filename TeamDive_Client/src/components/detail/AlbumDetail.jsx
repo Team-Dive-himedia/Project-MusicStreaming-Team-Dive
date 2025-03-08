@@ -8,7 +8,7 @@ import jaxios from '../../util/JwtUtil';
 import PlaylistSelectModal from './PlaylistSectionModal';
 
 import styles from '../../css/detail/albumDetail.module.css';
-
+import { Tooltip } from '@mui/material';
 /* 아이콘 */
 import { MdLibraryMusic } from "react-icons/md";
 import { BsFileEarmarkMusicFill } from "react-icons/bs";
@@ -258,31 +258,38 @@ const AlbumDetail = () => {
                                     </span>
                                 </td>
                                 <td className={styles.thActions}>
-                                    <button
-                                        className={styles.iconButton}
-                                        onClick={()=>{handlePlay(track.musicId)}}
-                                    >
-                                        <FaPlay size={16}/>
-                                    </button>
-                                    <button
-                                        className={styles.iconButton}
-                                        onClick={()=>{handlePlay2(track.musicId)}}
-                                    >
-                                        <MdQueueMusic size={22}/>
-                                    </button>
-                                    <button
-                                        className={styles.iconButton}
-                                        onClick={() => handleAddToPlaylist(track.musicId)}
-                                    >
-                                        <MdLibraryMusic size={20}/>
-                                    </button>
-                                    <button
-                                        className={styles.iconButton}
-                                        onClick={() => insertCart(track.musicId)} 
-                
-                                    >
-                                        <BsFileEarmarkMusicFill size={18}/>
-                                    </button>
+                                        <Tooltip title="듣기" arrow placement="top"> 
+                                            <button
+                                                className={styles.iconButton}
+                                                onClick={()=>{handlePlay(music.musicId)}}
+                                            >
+                                                <FaPlay size={16}/>
+                                            </button>
+                                        </Tooltip>
+                                        <Tooltip title="재생목록에 추가" arrow placement="top">
+                                            <button
+                                                className={styles.iconButton}
+                                                onClick={()=>{handlePlay2(music.musicId)}}
+                                            >
+                                                <MdQueueMusic size={22}/>
+                                            </button>
+                                        </Tooltip>
+                                        <Tooltip title="플레이리스트에 담기" arrow placement="top">
+                                            <button
+                                                className={styles.iconButton}
+                                                onClick={() => handleAddToPlaylist(music.musicId)}
+                                            >
+                                                <MdLibraryMusic size={20}/>
+                                            </button>
+                                        </Tooltip>
+                                        <Tooltip title="mp3 구매" arrow placement="top">
+                                            <button
+                                                className={styles.iconButton}
+                                                onClick={() => insertCart(music.musicId)} 
+                                            >
+                                                <BsFileEarmarkMusicFill size={18}/>
+                                            </button>
+                                        </Tooltip>
                                 </td>
                             </tr>
                         ))}

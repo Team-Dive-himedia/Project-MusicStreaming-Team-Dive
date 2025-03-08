@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../css/playlistPage.module.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PlaylistPage = () => {
   const [divePick, setDivePick] = useState([]);
   const [hotPlaylist, setHotPlaylist] = useState([]);
   const [randomPlaylist, setRandomPlaylist] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const playlistPage = async () => {
@@ -56,7 +58,8 @@ const PlaylistPage = () => {
               key={idx}
               className={styles.recommendCard}
               style={{ backgroundImage: `url(${item.coverImage})` }}
-            >
+              onClick={()=>{navigate(`/playlist/${item.playlistId}`)}}
+            > 
               <p className={styles.pTitle}>{item.title}</p>
             </div>
           ))}
@@ -76,6 +79,7 @@ const PlaylistPage = () => {
               key={idx}
               className={styles.genreCard}
               style={{ backgroundImage: `url(${item.coverImage})` }}
+              onClick={()=>{navigate(`/playlist/${item.playlistId}`)}}
             >
               <p className={styles.pTitle}>{item.title}</p>
             </div>
@@ -97,6 +101,7 @@ const PlaylistPage = () => {
               key={idx}
               className={styles.randomCard}
               style={{ backgroundImage: `url(${item.coverImage})` }}
+              onClick={()=>{navigate(`/playlist/${item.playlistId}`)}}
             >
               <p className={styles.pTitle}>{item.title}</p>
             </div>

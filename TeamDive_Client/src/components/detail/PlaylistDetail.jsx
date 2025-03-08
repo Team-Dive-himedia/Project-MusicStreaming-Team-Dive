@@ -7,8 +7,17 @@ import { PlayerContext } from "../../context/PlayerContext";
 import axios from "axios";
 
 
+
+import { RiVipCrown2Fill } from "react-icons/ri";
 import { HiOutlineHeart } from "react-icons/hi";
 import { HiHeart } from "react-icons/hi";
+
+import Tooltip from '@mui/material/Tooltip';
+
+import { BsFileEarmarkMusicFill } from "react-icons/bs";
+import { FaPlay } from "react-icons/fa";
+import { MdQueueMusic } from "react-icons/md";
+
 
 const PlaylistDetail = () => {
   const { playlistId } = useParams();
@@ -21,6 +30,14 @@ const PlaylistDetail = () => {
 
   // 체크박스
   const [selectedItems, setSelectedItems] = useState([]);
+
+
+  //Dive Pick 
+  const [divePick, setDivePick] = useState(false);
+
+  const pickClick = () => {
+    setDivePick(!divePick);
+  }
 
   // 수정 
   const [isEditing, setIsEditing] = useState(false);
@@ -44,7 +61,7 @@ const PlaylistDetail = () => {
   // 좋아요 개수 불러오기
   const fetchLikeCount = async () => {
     await axios.get('/api/community/getLikeCount', {
-        params: { pageType: 'PlAYLIST', entityId: playlistId }
+        params: { pageType: 'PLAYLIST', entityId: playlistId }
     }).then((result) => {
         setLikeCount(result.data.likeCount);
     }).catch((error) => {
@@ -403,6 +420,11 @@ const PlaylistDetail = () => {
                   >
                       { isLiked ? <HiHeart size={20}/> : <HiOutlineHeart size={20}/> }  &nbsp;{likeCount}
                   </button>
+                  <span style={{background: "black", marginLeft: "50px", cursor: "pointer"}} onClick={pickClick}>
+                    { divePick ? <RiVipCrown2Fill size={40} style={{color: "yellow"}} className={styles.glowEffect}/> :
+                    <RiVipCrown2Fill size={40} style={{color: "white"}}/>
+                    }
+                  </span>
                 </h1>
 
                 {
@@ -506,27 +528,29 @@ const PlaylistDetail = () => {
                     </p>
                   </div>
 
-                  <div className={styles.songActions}>
-                    <button
-                      className={styles.iconButton}
-                      onClick={()=>{handlePlay(music.musicId)}}
-                    >
-                      듣기
-                    </button>
-                    <button
-                      className={styles.iconButton}
-                      onClick={()=>{handlePlay2(music.musicId)}}
-                    >
-                      재생목록+
-                    </button>
-                    <button
-                      className={styles.iconButton}
-                      onClick={() => insertCart(music.musicId)} 
 
-                    >
-                      MP3
-                    </button>
+
+
+                  <div className={styles.songActions}>
+                      <Tooltip title="듣기" arrow placement="top">
+                          <button className={styles.iconButton} onClick={() => { handlePlay(music.musicId) }}>
+                              <FaPlay size={16} />
+                          </button>
+                      </Tooltip>
+
+                      <Tooltip title="재생목록 추가" arrow placement="top">
+                          <button className={styles.iconButton} onClick={() => { handlePlay2(music.musicId) }}>
+                              <MdQueueMusic size={22} />
+                          </button>
+                      </Tooltip>
+
+                      <Tooltip title="MP3 구매" arrow placement="top">
+                          <button className={styles.iconButton} onClick={() => insertCart(music.musicId)}>
+                              <BsFileEarmarkMusicFill size={18} />
+                          </button>
+                      </Tooltip>
                   </div>
+
                 </div>
               );
             })}

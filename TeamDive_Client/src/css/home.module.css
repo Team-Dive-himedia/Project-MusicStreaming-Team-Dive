@@ -113,14 +113,44 @@ transition: background-color 0.3s ease, color 0.3s ease;
   to { opacity: 1; transform: translateY(0); }
 }
 
+
+
 .userDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 150px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin-bottom: 15px;
 }
+
+.nickname {
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+.memberId {
+  max-width: 50px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+
 
 .nickname {
   font-size: 22px;
   font-weight: 600;
   color: #fff;
+  width: 80%;
+  margin: 0 auto;
+  
 }
 
 .memberId {

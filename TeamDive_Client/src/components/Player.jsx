@@ -616,14 +616,46 @@ export default function Player() {
                 paddingRight: '14px',
               }}
             >
-              <Box>
-                <Typography variant="h6" sx={{ color: 'silver' }}>
-                  {currentSong?.title||""}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '170px', 
+                  height: '40px', 
+                  overflow: 'hidden',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: 'silver',
+                    height: '20px', 
+                    lineHeight: '20px', 
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {currentSong?.title || ""}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'silver' }}>
-                  {currentSong?.artist||""}
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: '14px',
+                    color: 'gray',
+                    height: '20px', 
+                    lineHeight: '20px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {currentSong?.artist || ""}
                 </Typography>
               </Box>
+              
               <PlaylistPlayIcon
                 sx={{
                   color: 'silver',
@@ -632,6 +664,7 @@ export default function Player() {
                 onClick={() => setShowPlaylist(!showPlaylist)}
               />
             </Stack>
+
           </Box>
         </CustomPaper>
 
@@ -694,7 +727,8 @@ export default function Player() {
               ref={i === index ? currentSongRef : null} // 현재 재생 중인 곡에 ref 설정
             >
               <Box>
-                <Typography variant="subtitle1" sx={{ color: 'silver' }}>
+                <Typography variant="subtitle1" sx={{ 
+                  color: 'silver'}}>
                   {song.title}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'gray' }}>
