@@ -36,7 +36,12 @@ const PlaylistDetail = () => {
   const [divePick, setDivePick] = useState(false);
 
   const pickClick = () => {
-    setDivePick(!divePick);
+    if(!loginUser?.rolename.includes("ADMIN")) return console.log('rolonameAdmin없다? 확인');
+    console.log('어드민이다 확인')
+    jaxios.post('/api/music/updatePlaylist',{...playlist,divePick:!divePick})
+    .then((result)=>{
+      setDivePick(!divePick);
+    }).catch((err)=>{console.error(err);})
   }
 
   // 수정 
@@ -55,6 +60,7 @@ const PlaylistDetail = () => {
     jaxios.post('/api/community/insertLikes',null,{params:{entityId: playlistId, pagetype: 'PLAYLIST', memberId: loginUser.memberId}})
     .then((result)=>{
         setIsLiked(prevLike => !prevLike);
+        fetchLikeCount();
     }).catch((err)=>{console.error(err);})
   }
  
@@ -106,6 +112,7 @@ const PlaylistDetail = () => {
       .get("/api/music/playlistDetail", { params: { playlistId } })
       .then((res) => {
         setPlaylist(res.data.playlist);
+        setDivePick(res.data.playlist.divePick);
       })
       .catch((err) => {
         console.error("플레이리스트 정보 불러오기 실패:", err);

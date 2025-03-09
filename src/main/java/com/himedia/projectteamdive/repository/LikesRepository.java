@@ -17,8 +17,8 @@ public interface LikesRepository extends JpaRepository<Likes, Integer> {
             "FROM ( " +
             "    SELECT a.entity_id, ap.pagetype, COUNT(l.like_id) AS likeCount, " +
             "           ROW_NUMBER() OVER (PARTITION BY ap.pagetype ORDER BY COUNT(l.like_id) DESC) AS ranking " +
-            "    FROM Likes l " +
-            "    JOIN Allpage a ON l.allpage_id = a.allpage_id " +
+            "    FROM likes l " +
+            "    JOIN allpage a ON l.allpage_id = a.allpage_id " +
             "    JOIN allpage_pagetype ap ON a.allpage_id = ap.allpage_allpage_id " +
             "    WHERE ap.pagetype = :pagetype " +
             "    GROUP BY a.entity_id, ap.pagetype " +

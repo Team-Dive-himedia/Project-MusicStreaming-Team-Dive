@@ -46,7 +46,13 @@ const getLoginUser=()=>{
         memberInfo.provider = decodeURIComponent(memberInfo.provider);
         memberInfo.memberKey = decodeURIComponent(memberInfo.memberKey);
         memberInfo.introduction = decodeURIComponent(memberInfo.introduction);
-        memberInfo.rolename = decodeURIComponent(memberInfo.rolename);
+        // memberRoleList가 이미 배열이라면 바로 할당
+        if (Array.isArray(memberInfo.memberRoleList)) {
+            memberInfo.rolename = memberInfo.memberRoleList;
+        } else {
+            console.error("memberRoleList is not an array:", memberInfo.memberRoleList);
+            memberInfo.rolename = []; // 배열이 아니면 빈 배열로 초기화
+        }
         memberInfo.accessToken = decodeURIComponent(memberInfo.accessToken);
         memberInfo.refreshToken = decodeURIComponent(memberInfo.refreshToken);
     };
