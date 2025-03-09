@@ -35,7 +35,6 @@ function Home({ menubar, mood, setMood}) {
             
           
             <div className={`${styles.sidebar} ${menubar ? styles.open : ''}`}>
-                테스트 버전이다2222
                 <Link to='/' className={styles.link}>
                 <img src='https://d9k8tjx0yo0q5.cloudfront.net/icon/home1.gif' className={styles.menuImg} alt="메인아이콘"/>
                 <span className={styles.linkText}>홈</span>

@@ -100,12 +100,12 @@ const MyPlaylist = () => {
       setShowModal(false);
       setPlaylists([]);
 
-      const [playlistData, likeData] = await Promise.all([playlistView(), likelistView()]);
+      const [playlistData, likeData, divePickData] = await Promise.all([playlistView(), likelistView(), divePicklistView()]);
   
-      setPlaylists(
-        Array.from(new Set([...(playlistData || []), ...(likeData || [])].map(JSON.stringify)))
-        .map(JSON.parse)
-      );
+        setPlaylists(
+          Array.from(new Set([...(playlistData || []), ...(likeData || []), ...((Array.isArray(loginUser.rolename) && loginUser.rolename.includes("ADMIN")) ? divePickData || [] : [])].map(JSON.stringify)))
+          .map(JSON.parse)
+        );
     } catch (err) {
       console.error("플레이리스트 생성 에러:", err);
       alert("플레이리스트 생성 실패");
@@ -117,10 +117,10 @@ const MyPlaylist = () => {
     const totalView = async()=>{
       try {
         // 플레이리스트와 좋아요 리스트를 비동기적으로 가져오기
-        const [playlistData, likeData] = await Promise.all([playlistView(), likelistView()]);
+        const [playlistData, likeData, divePickData] = await Promise.all([playlistView(), likelistView(), divePicklistView()]);
   
         setPlaylists(
-          Array.from(new Set([...(playlistData || []), ...(likeData || [])].map(JSON.stringify)))
+          Array.from(new Set([...(playlistData || []), ...(likeData || []), ...((Array.isArray(loginUser.rolename) && loginUser.rolename.includes("ADMIN")) ? divePickData || [] : [])].map(JSON.stringify)))
           .map(JSON.parse)
         );
       } catch (err) {
@@ -150,6 +150,17 @@ const MyPlaylist = () => {
       });
   
       return result.data && result.data.likesList ? result.data.likesList : [];
+    } catch (err) {
+      console.error("좋아요 리스트 못 가져옴:", err);
+      return [];
+    }
+  };
+
+  const divePicklistView = async () => {
+    try {
+      const result = await jaxios.get('/api/music/getDivePick');
+  
+      return result.data && result.data.divePick ? result.data.divePick : [];
     } catch (err) {
       console.error("좋아요 리스트 못 가져옴:", err);
       return [];

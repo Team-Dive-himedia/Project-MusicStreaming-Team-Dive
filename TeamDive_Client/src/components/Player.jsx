@@ -188,7 +188,7 @@ export default function Player() {
     ()=>{
       if(playlist.length> 0 && playlist.every(song=>song.src) && addAndPlay && audioRef.current){
         setIndex(prevIndex => {
-          let newIndex = prevIndex + 1;
+          let newIndex = prevIndex+1;
           if(playlist.length==1) newIndex =0;
           handleAudioChange(newIndex, true);
           return newIndex;
@@ -204,7 +204,7 @@ export default function Player() {
         }).catch((err)=>{console.error(err);})
       }
 
-      if(playlist.length> 0 && playlist.every(song=>song?.src) && recommend.current && audioRef.current){
+      if(playlist.length> 1 && playlist.every(song=>song?.src) && recommend.current && audioRef.current && index===playlist.length-1){
         setIndex(prevIndex => {
           let newIndex = prevIndex + 1;
           if(playlist.length==1) newIndex =0;
@@ -305,7 +305,9 @@ export default function Player() {
     const audioEl = audioRef.current;
     if (!audioEl) return;
     const handleEnded = () => {
-      toggleSkipForward('auto');
+      if(playlist.length!==1){
+        toggleSkipForward('auto');
+      }
     };
     audioEl.addEventListener('ended', handleEnded);
     return () => {
@@ -699,7 +701,7 @@ export default function Player() {
               <Typography variant="h6" sx={{ color: 'silver' }}>
                 Playlist
               </Typography>
-              <DeleteIcon sx={{ position: 'relative', marginLeft: '-110px', cursor: 'pointer'}} onClick={()=>{setPlaylist([]);}}/>
+              <DeleteIcon sx={{ position: 'relative', marginLeft: '-110px', cursor: 'pointer'}} onClick={()=>{setPlaylist([]);setIndex(0); setIsPlaying(false);audioRef.current.pause(); }}/>
               <IconButton size="small" onClick={() => setShowPlaylist(false)} sx={{ color: 'silver' }}>
                 <CloseIcon />
               </IconButton>

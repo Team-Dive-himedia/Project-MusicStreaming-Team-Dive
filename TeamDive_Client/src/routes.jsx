@@ -9,7 +9,6 @@ import AlbumDetail from "./components/detail/AlbumDetail";
 import PopularChart from "./components/PopularChart";
 import Storage from "./components/storage/storage";
 import { PlaylistPage } from "./components/playlist/PlaylistPage";
-import ForgottenPassword from "./components/member/ForgottenPassword"
 
 
 import PaymentsCheckout from "./components/payments/PaymentsCheckout";
@@ -28,8 +27,6 @@ import PlaylistDetail from "./components/detail/PlaylistDetail";
 import SearchResults from "./components/frame/mainpage/SearchResult";
 import SearchMore from "./components/frame/mainpage/SearchMore";
 
-import NoticeBoard from "./components/frame/mainpage/NoticeBoard";
-
 
 function AppRoutes({mood, setMood}) {
     return (
@@ -42,8 +39,6 @@ function AppRoutes({mood, setMood}) {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/kakaoLogin/:memberId" element={<KakaoLogin />} />
             <Route path="/sign-up" element={<JoinForm />} />
-            <Route path="/forgottenPassword" element={<ForgottenPassword />} />
-            
 
             <Route path="/music/:musicId" element={<MusicDetail />} />
             <Route path="/album/:albumId" element={<AlbumDetail />} />
@@ -58,11 +53,10 @@ function AppRoutes({mood, setMood}) {
 
             {/* 마이페이지 */}
             <Route path="/mypage/:mypageCategory" element={<Mypage />} />
-            <Route path="/mypage/:mypageCategory/:mp3Category" element={<Mypage />} />
 
             {/* 스토리지 */}
             <Route path="/storage/:storageCategory" element={<Storage />}/>
-
+            <Route path="/storage/:storageCategory/:mp3Category" element={<Storage />} />
 
             {/* 차트 더보기 */}
             <Route path="/top100" element={<Top100 />}/>
@@ -75,8 +69,7 @@ function AppRoutes({mood, setMood}) {
             <Route path="/search" element={<SearchResults />}/>
             <Route path="/searchMore" element={<SearchMore />} /> 
 
-            {/* 공지 */}
-            <Route path="/notice" element={<NoticeBoard />} /> 
+
 
 
 
