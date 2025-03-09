@@ -188,6 +188,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         }
 
+        if(path.startsWith("/api/daily/stats")){
+            return true;
+        }
+
+
+
+
 //=========================================================================================
 
         if(path.startsWith("/member/login")){
@@ -302,23 +309,24 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         }
 
+        if(path.startsWith("/stats/daily")){
+            return true;
+        }
+
+        if(path.startsWith("/stats/monthly")){
+            return true;
+        }
+
+        if(path.startsWith("/stats/dailyDetail")){
+            return true;
+        }
 
 
+        if(path.startsWith("/music/getPlaylistPage")){
+            return true;
+        }
 
 
-
-
-
-
-
-
-
-
-
-
-//        if(path.startsWith("/music/getPlaylistPage")){
-//            return true;
-//        }
 
 
         return false;
