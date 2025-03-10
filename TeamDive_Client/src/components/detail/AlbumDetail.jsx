@@ -237,63 +237,54 @@ const AlbumDetail = () => {
                     </thead>
                     <tbody>
                         {albumDetail.musicList.map((track, index) => (
-                            <tr key={track.musicId} className={styles.trackRow}>
-                                <td className={styles.thNumber}>
-                                    {index + 1}
-                                </td>
-                                <td
-                                    className={styles.thTitle}
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={() => handleTrackClick(track.musicId)}>
-                                    {track.title}
-                                </td>
-                                <td className={styles.thArtist}>
-                                    <span
-                                        onClick={() => {
-                                            navigate(`/artist/${track.artistId}`);
+                            <tr key={track.musicId} className={`${styles.trackRow} ${track.titleMusic ? styles.highlightTrack : ""}`}>
+                                <td className={styles.thNumber}>{index + 1}</td>
+
+
+                                <td className={styles.thTitle}
+                                        style={{
+                                            cursor: 'pointer',
+                                            fontWeight: track.titleMusic ? "bold" : "normal",
+                                            color: track.titleMusic ? "gold" : "white"
                                         }}
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        {albumDetail.artistName}
+
+                                        onClick={() => handleTrackClick(track.musicId)}
+                                >
+                                    {track.title} {track.titleMusic && "⭐"}
+                                </td>
+
+                                <td className={styles.thArtist}>
+                                    <span onClick={() => navigate(`/artist/${track.artistId}`)} style={{ cursor: 'pointer' }}>
+                                        {track.artistName}
                                     </span>
                                 </td>
+
                                 <td className={styles.thActions}>
-                                        <Tooltip title="듣기" arrow placement="top"> 
-                                            <button
-                                                className={styles.iconButton}
-                                                onClick={()=>{handlePlay(track.musicId)}}
-                                            >
-                                                <FaPlay size={16}/>
-                                            </button>
-                                        </Tooltip>
-                                        <Tooltip title="재생목록에 추가" arrow placement="top">
-                                            <button
-                                                className={styles.iconButton}
-                                                onClick={()=>{handlePlay2(track.musicId)}}
-                                            >
-                                                <MdQueueMusic size={22}/>
-                                            </button>
-                                        </Tooltip>
-                                        <Tooltip title="플레이리스트에 담기" arrow placement="top">
-                                            <button
-                                                className={styles.iconButton}
-                                                onClick={() => handleAddToPlaylist(track.musicId)}
-                                            >
-                                                <MdLibraryMusic size={20}/>
-                                            </button>
-                                        </Tooltip>
-                                        <Tooltip title="mp3 구매" arrow placement="top">
-                                            <button
-                                                className={styles.iconButton}
-                                                onClick={() => insertCart(track.musicId)} 
-                                            >
-                                                <BsFileEarmarkMusicFill size={18}/>
-                                            </button>
-                                        </Tooltip>
+                                    <Tooltip title="듣기" arrow placement="top">
+                                        <button className={styles.iconButton} onClick={() => handlePlay(track.musicId)}>
+                                            <FaPlay size={16}/>
+                                        </button>
+                                    </Tooltip>
+                                    <Tooltip title="재생목록에 추가" arrow placement="top">
+                                        <button className={styles.iconButton} onClick={() => handlePlay2(track.musicId)}>
+                                            <MdQueueMusic size={22}/>
+                                        </button>
+                                    </Tooltip>
+                                    <Tooltip title="플레이리스트에 담기" arrow placement="top">
+                                        <button className={styles.iconButton} onClick={() => handleAddToPlaylist(track.musicId)}>
+                                            <MdLibraryMusic size={20}/>
+                                        </button>
+                                    </Tooltip>
+                                    <Tooltip title="mp3 구매" arrow placement="top">
+                                        <button className={styles.iconButton} onClick={() => insertCart(track.musicId)}>
+                                            <BsFileEarmarkMusicFill size={18}/>
+                                        </button>
+                                    </Tooltip>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
+
                 </table>
             </div>
 
