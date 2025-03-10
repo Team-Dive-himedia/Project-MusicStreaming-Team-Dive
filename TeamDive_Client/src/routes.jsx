@@ -53,10 +53,10 @@ function AppRoutes({mood, setMood}) {
 
             {/* 마이페이지 */}
             <Route path="/mypage/:mypageCategory" element={<Mypage />} />
+            <Route path="/mypage/:mypageCategory/:mp3Category" element={<Mypage />} />
 
             {/* 스토리지 */}
             <Route path="/storage/:storageCategory" element={<Storage />}/>
-            <Route path="/storage/:storageCategory/:mp3Category" element={<Storage />} />
 
             {/* 차트 더보기 */}
             <Route path="/top100" element={<Top100 />}/>
