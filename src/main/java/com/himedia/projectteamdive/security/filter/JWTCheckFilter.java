@@ -200,6 +200,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
 //=========================================================================================
 
+        if(path.startsWith("/music/getPlaylistPage")){
+            return true;
+        }
+
+        if(path.startsWith("/music/playlistDetail")){
+            return true;
+        }
         if(path.startsWith("/member/login")){
             return true;
         }

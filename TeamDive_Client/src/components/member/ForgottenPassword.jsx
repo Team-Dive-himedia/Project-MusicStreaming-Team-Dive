@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 import updatePasswordStyle from '../../css/updatePasswordStyle.module.css';
 
 
-const ForgottenPassword = () => {
+const ForgottenPassword = ({setPwdModal}) => {
 
     const navigate = useNavigate();
 
@@ -14,8 +13,12 @@ const ForgottenPassword = () => {
     const [password, setPassword] = useState('');
     const [repassword, setRepassword] = useState('');
 
+    
+
     const [email, setEmail] = useState('');
     const [emailCode, setEmailCode] = useState('');
+    
+    const [emailVerified,setEmailVerified] = useState(false);
 
  
     async function findByMemberId() {
@@ -58,9 +61,11 @@ const ForgottenPassword = () => {
                 setEmail(result.data.email);
                 console.log('email-1', email);
                 sendEmailForPassword(email);
+                setEmailVerified(true);
             }else{
                 alert('입력하신 이메일은 회원가입시 입력한 이메일과 다릅니다.');
                 setEmail('');
+                setEmailVerified(false);
             }
         })
         .catch((err)=>{
@@ -93,36 +98,32 @@ const ForgottenPassword = () => {
 
 
     return (
-        <div className={updatePasswordStyle.page}>
-            <div>
-                <h1>비밀번호를 잊으셧나요?</h1>
-            </div>
-            <div>
-                <label>찾을 아이디</label>
-                <input type='text' value={memberId} onChange={(e)=>{setMemberId(e.currentTarget.value)}} />
-                <button onClick={()=>{findByMemberId();}}>찾기</button>
+        <div className={updatePasswordStyle.forgottenPasswordContainer}>
+            <h1 className={updatePasswordStyle.forgottenPasswordTitle}>비밀번호 찾기</h1>
+            
+            <div className={updatePasswordStyle.inputGroup}>
+                <label className={updatePasswordStyle.forgottenPasswordLabel}>아이디</label>
+                <div className={updatePasswordStyle.inputWithButton}>
+                    <input type="text" value={memberId} onChange={(e) => setMemberId(e.target.value)} className={updatePasswordStyle.forgottenPasswordInput} />
+                    <button className={updatePasswordStyle.forgottenPasswordButton} onClick={findByMemberId}>확인</button>
+                </div>
             </div>
             
-            {/* 모달창 */}
-            <div>
-                <label>이메일 인증</label>
-                <input type='text' value={email} onChange={(e)=>{
-                    setEmail(e.currentTarget.value);
-                }}/>
-                <button onClick={()=>{
-                    emailCheckForPassword();
-                }}>이메일 체크</button>
-                <button onClick={()=>{
-                    sendEmailForPassword();
-                }}> 임시비밀번호 발급 </button>
+            <div className={updatePasswordStyle.inputGroup}>
+                <label className={updatePasswordStyle.forgottenPasswordLabel}>이메일 인증</label>
+                <div className={updatePasswordStyle.inputWithButton}>
+                    <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className={updatePasswordStyle.forgottenPasswordInput} />
+                    <button className={updatePasswordStyle.forgottenPasswordButton} onClick={emailCheckForPassword}>인증</button>
+                </div>
             </div>
-
-            <div>
-                <button onClick={()=>{
-                    navigate('/login');
-                }}>취소</button>
-            </div>
+            
+            {emailVerified && (
+                <button className={updatePasswordStyle.forgottenPasswordButton2} onClick={() => sendEmailForPassword(email)}>임시 비밀번호 발급</button>
+            )}
+            
+            <button className={updatePasswordStyle.forgottenPasswordClose} onClick={() => setPwdModal(false)}>닫기</button>
         </div>
+
     )
 }
 
