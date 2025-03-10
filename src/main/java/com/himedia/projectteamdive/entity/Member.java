@@ -48,4 +48,13 @@ public class Member {
     @Builder.Default
     private List<RoleName> memberRoleList = new ArrayList<RoleName>();
 
+
+    public int getBirthYear() {
+        try {
+            // 🔹 birth가 "yyyy-MM-dd" 형식인 경우, "-"로 분리 후 첫 번째 요소(연도)만 추출
+            return Integer.parseInt(this.birth.split("-")[0]);
+        } catch (Exception e) {
+            throw new RuntimeException("유효하지 않은 birth 값: " + this.birth);
+        }
+    }
 }

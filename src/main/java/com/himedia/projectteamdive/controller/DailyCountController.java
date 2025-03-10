@@ -16,55 +16,48 @@ public class DailyCountController {
     @Autowired
     private DailyCountService dailyCountService;
 
-    // ✅ 특정 기간의 일별 스트리밍 데이터 조회
     @GetMapping("/daily")
-    public List<DailyCountDto> getDailyStreamingStats(
+    public List<DailyCountDto> getStreamingStats(
+            @RequestParam String type, // "daily", "monthly", "yearly"
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
-        System.out.println("📅 조회 요청: " + startDate + " ~ " + endDate);
-
-        List<DailyCountDto> stats = dailyCountService.getDailyStreamingStats(startDate, endDate);
-
-        // ✅ 조회된 데이터 개수 출력
-        System.out.println("✅ 조회된 데이터 개수: " + stats.size());
-        stats.forEach(stat -> {
-            System.out.println("📆 날짜: " + stat.getDate() + ", 🎵 총 재생 수: " + stat.getTotalPlayCount());
-        });
-
-        return stats;
+        System.out.println("📊 요청 타입: " + type + " | 기간: " + startDate + " ~ " + endDate);
+        return dailyCountService.getStreamingStats(type, startDate, endDate);
     }
 
-    @GetMapping("/monthly")
-    public List<DailyCountDto> getMonthlyStreamingStats(@RequestParam int year) {
-        return dailyCountService.getMonthlyStreamingStats(year);
-    }
+
 
 
     @GetMapping("/dailyDetail/{date}")
-    public DailyCountDto getDailyStatsByDate(
+    public List<DailyCountDto> getDailyStatsByDate(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        System.out.println("📅 세부 데이터 조회 요청: " + date);
+        System.out.println("세부 데이터 조회 요청: " + date);
 
-        DailyCountDto stats = dailyCountService.getDailyStreamingStatsByDate(date);
+        List<DailyCountDto> statsList = dailyCountService.getDailyDetail(date);
 
-        System.out.println("✅ 조회된 날짜: " + stats.getDate());
-        System.out.println("🎵 총 재생 수: " + stats.getTotalPlayCount());
-        System.out.println("👨‍👩‍👦‍👦 성별 - 남성: " + stats.getMalePlayCount() + ", 여성: " + stats.getFemalePlayCount());
-        System.out.println("🔢 연령대 - 10대: " + stats.getTeenPlayCount() + ", 20대: " + stats.getTwentiesPlayCount() +
-                ", 30대: " + stats.getThirtiesPlayCount() + ", 40대: " + stats.getFortiesPlayCount() +
-                ", 50대 이상: " + stats.getFiftiesPlusPlayCount());
+        if (statsList.isEmpty()) {
+            System.out.println("해당 날짜의 데이터가 없습니다: " + date);
+            throw new RuntimeException("해당 날짜의 데이터가 없습니다: " + date);
+        }
 
-        return stats;
+        // 조회된 데이터 개수 출력
+        System.out.println("조회된 데이터 개수: " + statsList.size());
+
+        statsList.forEach(stats -> {
+            System.out.println("날짜: " + stats.getDate() + ",총 재생 수: " + stats.getTotalPlayCount());
+            System.out.println("성별 - 남성: " + stats.getMalePlayCount() + ", 여성: " + stats.getFemalePlayCount());
+            System.out.println("연령대 - 10대: " + stats.getTeenPlayCount() + ", 20대: " + stats.getTwentiesPlayCount() +
+                    ", 30대: " + stats.getThirtiesPlayCount() + ", 40대: " + stats.getFortiesPlayCount() +
+                    ", 50대 이상: " + stats.getFiftiesPlusPlayCount());
+        });
+
+        return statsList;
     }
 
-    // ✅ 수동 실행을 위한 API
-    @PostMapping("/saveManual")
-    public String forceSaveDailyStats(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        dailyCountService.forceSaveDailyStreamingStats(date);
-        return "✅ " + date + " 데이터 강제 저장 완료!";
-    }
+
+
 
 
 }
