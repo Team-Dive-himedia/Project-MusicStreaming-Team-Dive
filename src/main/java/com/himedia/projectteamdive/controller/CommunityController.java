@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/api/community")
+@RequestMapping("/community")
 public class CommunityController {
     @Autowired
     CommunityService cs;
