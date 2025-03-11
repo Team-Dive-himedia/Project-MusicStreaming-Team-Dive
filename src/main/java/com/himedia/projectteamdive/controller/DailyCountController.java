@@ -29,6 +29,8 @@ public class DailyCountController {
 
 
 
+
+
     @GetMapping("/dailyDetail/{date}")
     public List<DailyCountDto> getDailyStatsByDate(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
