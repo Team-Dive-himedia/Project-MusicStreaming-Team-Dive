@@ -7,7 +7,6 @@ import Modal from 'react-modal'
 import DaumPostcode from 'react-daum-postcode'
 import { Cookies } from 'react-cookie'
 import { loginAction, logoutAction } from '../../../store/UserSlice'
-import Userdefault from '../../../../public/image/user.png'
 
 import updateStyles from '../../../css/mypage/mypageUpdate.module.css'
 
@@ -17,7 +16,8 @@ const UpdateMemberForm = () => {
   const dispatch = useDispatch()
   const cookies = new Cookies()
 
-  const [preview, setPreview] = useState('')
+  
+  const [preview, setPreview] = useState('https://d9k8tjx0yo0q5.cloudfront.net/image/user.png')
   const [image, setImage] = useState('');
 
   const [memberId, setMemberId] = useState('')
@@ -53,12 +53,13 @@ const UpdateMemberForm = () => {
     setMemberId(loginUser.memberId)
     setPhone(loginUser.phone)
     setNickname(loginUser.nickname)
-    setZipCode(loginUser.zipCode)
+    setZipCode(loginUser.zipCode || 0)
     setAddress(loginUser.address)
     setAddressDetail(loginUser.addressDetail)
     setAddressExtra(loginUser.addressExtra)
     setIntroduction(loginUser.introduction)
     setImage(loginUser.image)
+    setPreview(loginUser.image)
 
     if (loginUser.provider === 'kakao') {
       setPassword('kakao1234')
@@ -76,30 +77,22 @@ const UpdateMemberForm = () => {
     }
     setIsOpen(false)
   }
-
+  const [newImage,setNewImage]=useState();
   // 이미지 업로드
-    const onImageUpload = async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const formData = new FormData();
-      formData.append("image", file);
-      try {
-          if(image){
-              const response=await axios.delete('/api/music/deleteFile',{params:{file:image}});
-          }
-          let response = await axios.post("/api/music/imageUpload", formData, {
-              headers: { "Content-Type": "multipart/form-data" },
-          });
-         setImage(response.data.image);
-      } catch (error) {
-          console.error("이미지 업로드 실패:", error);
-          alert("이미지 업로드 실패");
-      }
+  const onImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file.type.startsWith("image/")) {
+      alert("이미지 파일만 업로드할 수 있습니다.");
+      return;
+    }
+    setNewImage(file); // S3 업로드용 상태 저장
+    setPreview(URL.createObjectURL(file)); // 미리보기 URL 생성
   };
 
   // 회원정보 수정
   async function onSubmit() {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+    let imageUrl=image;
     try {
       if (!password) {
         return alert('비밀번호를 입력해주세요')
@@ -109,6 +102,22 @@ const UpdateMemberForm = () => {
       }
       if (password !== passwordCheck) {
         return alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.')
+      }
+      if (newImage) {
+        const formData = new FormData();
+        formData.append("image", newImage);
+        try {
+            if(image!='https://d9k8tjx0yo0q5.cloudfront.net/image/user.png'){
+                const response=await axios.delete('/api/music/deleteFile',{params:{file:image}});
+            }
+            let response = await axios.post("/api/music/imageUpload", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            imageUrl=response.data.image;
+        } catch (error) {
+            console.error("이미지 업로드 실패:", error);
+            alert("이미지 업로드 실패");
+        }
       }
 
       const res = await jaxios.post('/api/member/updateMember', {
@@ -121,7 +130,7 @@ const UpdateMemberForm = () => {
         addressDetail,
         addressExtra,
         introduction,
-        image,
+        image : imageUrl || image ,
       })
 
       if (res.data.msg === 'yes') {
@@ -143,6 +152,9 @@ const UpdateMemberForm = () => {
   function deleteMember() {
     if (!window.confirm('정말 회원 탈퇴 하시겠습니까?')) {
       return
+    }
+    if(image!='https://d9k8tjx0yo0q5.cloudfront.net/image/user.png'){
+      axios.delete('/api/music/deleteFile',{params:{file:image}})
     }
     jaxios
       .delete(`/api/member/deleteMember/${memberId}`)
@@ -168,7 +180,7 @@ const UpdateMemberForm = () => {
           <label htmlFor="image">프로필 이미지 (선택)</label>
           <input type="file" id="imageUpload" accept="image/*" onChange={onImageUpload} style={{ display: "none" }} />
           <img
-              src={ image || Userdefault} 
+              src={ preview } 
               alt="아티스트 이미지"
               className={updateStyles.profilePreview}
               onClick={() => document.getElementById("imageUpload").click()}

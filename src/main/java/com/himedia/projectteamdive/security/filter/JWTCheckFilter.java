@@ -188,6 +188,16 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         }
 
+        if(path.startsWith("/api/music/getTop3")){
+            return true;
+        }
+        if(path.startsWith("/api/music/deleteFile")){
+            return true;
+        }
+        if(path.startsWith("/api/music/imageUpload")){
+            return true;
+        }
+
         if(path.startsWith("/api/daily/stats")){
             return true;
         }
@@ -197,6 +207,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
 //=========================================================================================
 
+        if(path.startsWith("/music/getPlaylistPage")){
+            return true;
+        }
+
+        if(path.startsWith("/music/playlistDetail")){
+            return true;
+        }
         if(path.startsWith("/member/login")){
             return true;
         }
@@ -308,6 +325,23 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/member/sendEmailForPassword")){
             return true;
         }
+        if(path.startsWith("/music/getTop3")){
+            return true;
+        }
+
+        if(path.startsWith("/music/deleteFile")){
+            return true;
+        }
+        if(path.startsWith("/music/imageUpload")){
+            return true;
+        }
+
+
+
+
+
+
+
 
         if(path.startsWith("/stats/daily")){
             return true;
@@ -327,6 +361,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         }
 
 
+
+//        if(path.startsWith("/music/getPlaylistPage")){
+//            return true;
+//        }
 
 
         return false;

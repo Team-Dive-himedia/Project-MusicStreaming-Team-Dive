@@ -27,6 +27,7 @@ public class PlaylistDto {
     private String nickname;
     private List<MusicDto> musicList;
     private boolean shayringyn;
+    private boolean divePick;
     private Timestamp indate;
 
     public PlaylistDto(Playlist playlist) {
@@ -41,6 +42,7 @@ public class PlaylistDto {
                 .map(MusicDto::new)
                 .collect(Collectors.toList());
         this.shayringyn = playlist.isShayringyn();
+        this.divePick = playlist.isDivePick();
         this.indate = playlist.getIndate();
     }
 

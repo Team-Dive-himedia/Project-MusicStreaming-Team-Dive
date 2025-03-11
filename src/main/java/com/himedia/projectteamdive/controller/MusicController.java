@@ -390,6 +390,12 @@ public class MusicController {
         return map;
     }
 
+    @GetMapping("/getDivePick")
+    public HashMap<String, Object> getDivePick() {
+        HashMap<String,Object> map= ms.getDivePick();
+        return map;
+    }
+
 
 
 

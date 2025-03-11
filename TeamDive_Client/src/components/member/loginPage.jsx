@@ -5,12 +5,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginAction } from '../../store/UserSlice';
+import ForgottenPassword from './ForgottenPassword';
 
 
 const LoginPage =() => {
 
     const [messageId, setMessageId] = useState('');
     const [messageEmail, setMessageEmail] = useState('');
+    const [pwdModal, setPwdModal] = useState(false);
 
     const [memberId, setMemberId] = useState('');
     const [password, setPassword] = useState('');
@@ -75,8 +77,16 @@ const LoginPage =() => {
                         </button>
                     </div>
                 </form>
-                <Link to='/forgottenPassword' className={loginStyles.forgotPassword}>비밀번호를 잊으셨나요?</Link>
+                <span style={{cursor:"pointer"}} onClick={()=>setPwdModal(true)}>비밀번호를 잊으셨나요?</span>
             </div>
+                {
+                    pwdModal &&                 
+                    <div className={loginStyles.modalOverlay}>
+                        <div className={loginStyles.modalContent}>
+                            <ForgottenPassword pwdModal={pwdModal} setPwdModal={setPwdModal} closeModal={() => setPwdModal(false)} />
+                        </div>
+                    </div>
+                }
         </div>
       );
 }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -6,18 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import updatePasswordStyle from '../../css/updatePasswordStyle.module.css';
 
 
-const ForgottenPassword = () => {
+const ForgottenPassword = ({setPwdModal}) => {
 
     const navigate = useNavigate();
 
     const [memberId, setMemberId] = useState('');
-    const [password, setPassword] = useState('');
-    const [repassword, setRepassword] = useState('');
-
     const [email, setEmail] = useState('');
-    const [emailCode, setEmailCode] = useState('');
 
- 
+    const [emailVerified,setEmailVerified] = useState(false);
+
     async function findByMemberId() {
 
         try {
@@ -25,17 +22,6 @@ const ForgottenPassword = () => {
 
             if (result.data.msg === 'yes') {
                 alert('아이디가 확인되었습니다.');
-
-                if (!window.confirm('패스워드를 초기화 하시겠습니까?')) {
-                    return; // 사용자가 취소하면 함수 종료
-                }
-
-                result = await axios.post('/api/member/resetPassword', null,{ params: { memberId } });
-                if (result.data.msg === 'yes') {
-                    alert('비밀번호가 초기화 되었습니다.');
-                } else {
-                    alert('비밀번호 초기화에 실패했습니다.');
-                }
             } else {
                 alert('조회한 아이디는 없는 아이디입니다.');
                 if (window.confirm('회원가입 하시겠습니까?')) {
@@ -48,81 +34,84 @@ const ForgottenPassword = () => {
         }
     }
 
-    function emailCheckForPassword(){
+    async function emailCheckForPassword(){
         if(!email){return alert('회원가입시 인증된 이메일을 입력해주세요.')}
+        try{
+            const result =await axios.get('/api/member/emailCheckForPassword', {params:{memberId, email}})
 
-        axios.get('/api/member/emailCheckForPassword', {params:{memberId, email}})
-        .then((result)=>{
             if(result.data.msg === 'yes'){
                 alert('인증되었습니다.');
-                setEmail(result.data.email);
-                console.log('email-1', email);
-                sendEmailForPassword(email);
+                setEmailVerified(true);
             }else{
                 alert('입력하신 이메일은 회원가입시 입력한 이메일과 다릅니다.');
-                setEmail('');
             }
-        })
-        .catch((err)=>{
+
+        }catch(err){
             console.error(err);
-        })
+        }
     }
 
-    function sendEmailForPassword(email){
-        console.log('email-2', email);
-        if(!window.confirm('임시 비밀번호를 발급받으시겟습니까?')){
-            return ;
-        }
-        axios.post('/api/member/sendEmailForPassword', null, {params:{memberId, email}})
-        .then((result)=>{
-            if(result.data.msg === 'yes'){
-                
-                alert('임시비밀번호가 발급되었습니다. 이메일을 확인하세요');
+    async function sendEmailForPassword(memberId, email) {
+        try {
+            // 임시 비밀번호 발급 여부 확인
+            if (!window.confirm('임시 비밀번호를 발급받으시겠습니까?')) {
+                return;
+            }
+
+            // memberId와 email 유효성 검사
+            if (!memberId || !email) {
+                alert('회원 정보 또는 이메일이 잘못되었습니다.');
+                return;
+            }
+
+            // 임시 비밀번호 이메일 발송 요청
+            let result = await axios.post('/api/member/sendEmailForPassword', null, { params: { memberId, email } });
+
+            if (result.data.msg === 'yes') {
+
+                alert('임시비밀번호가 발급되었습니다. 이메일을 확인하세요.');
                 navigate('/login');
-            }else{
+            }
+            else {
+                // 임시 비밀번호 발급 실패
                 alert('임시 비밀번호 발급에 실패했습니다.');
             }
-        })
-        .catch((err)=>{
+        } catch (err) {
             console.error(err);
             alert('서버 오류가 발생했습니다. 다시 시도해주세요.');
-        })
-        
-    };
+        }
+    }
+
 
 
 
     return (
-        <div className={updatePasswordStyle.page}>
-            <div>
-                <h1>비밀번호를 잊으셧나요?</h1>
-            </div>
-            <div>
-                <label>찾을 아이디</label>
-                <input type='text' value={memberId} onChange={(e)=>{setMemberId(e.currentTarget.value)}} />
-                <button onClick={()=>{findByMemberId();}}>찾기</button>
-            </div>
-            
-            {/* 모달창 */}
-            <div>
-                <label>이메일 인증</label>
-                <input type='text' value={email} onChange={(e)=>{
-                    setEmail(e.currentTarget.value);
-                }}/>
-                <button onClick={()=>{
-                    emailCheckForPassword();
-                }}>이메일 체크</button>
-                <button onClick={()=>{
-                    sendEmailForPassword();
-                }}> 임시비밀번호 발급 </button>
+        <div className={updatePasswordStyle.forgottenPasswordContainer}>
+            <h1 className={updatePasswordStyle.forgottenPasswordTitle}>비밀번호 찾기</h1>
+
+            <div className={updatePasswordStyle.inputGroup}>
+                <label className={updatePasswordStyle.forgottenPasswordLabel}>아이디</label>
+                <div className={updatePasswordStyle.inputWithButton}>
+                    <input type="text" value={memberId} onChange={(e) => setMemberId(e.target.value)} className={updatePasswordStyle.forgottenPasswordInput} />
+                    <button className={updatePasswordStyle.forgottenPasswordButton} onClick={findByMemberId}>확인</button>
+                </div>
             </div>
 
-            <div>
-                <button onClick={()=>{
-                    navigate('/login');
-                }}>취소</button>
+            <div className={updatePasswordStyle.inputGroup}>
+                <label className={updatePasswordStyle.forgottenPasswordLabel}>이메일 인증</label>
+                <div className={updatePasswordStyle.inputWithButton}>
+                    <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className={updatePasswordStyle.forgottenPasswordInput} />
+                    <button className={updatePasswordStyle.forgottenPasswordButton} onClick={emailCheckForPassword}>인증</button>
+                </div>
             </div>
+
+            {emailVerified && (
+                <button className={updatePasswordStyle.forgottenPasswordButton2} onClick={() => sendEmailForPassword(memberId, email)}>임시 비밀번호 발급</button>
+            )}
+
+            <button className={updatePasswordStyle.forgottenPasswordClose} onClick={() => setPwdModal(false)}>닫기</button>
         </div>
+
     )
 }
 

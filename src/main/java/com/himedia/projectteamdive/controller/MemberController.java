@@ -240,6 +240,7 @@ public class MemberController {
             member.setNickname( pf.getNickname() );
             member.setPassword( "kakao1234" );
             member.setProvider( "kakao" );
+            member.setImage("https://d9k8tjx0yo0q5.cloudfront.net/image/user.png");
             ms.insertMember(member);
         }
         response.sendRedirect("http://13.209.123.104/KakaoLogin/"+member.getMemberId());

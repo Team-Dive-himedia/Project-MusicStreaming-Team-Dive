@@ -121,13 +121,14 @@
 /* 비밀번호 찾기 hover */
 .forgotPassword:hover {
   text-decoration: underline;
-  color: #ff4081;
+
 }
-/* 기존 스타일은 그대로 유지하고, 추가 스타일만 정의 */
+
 
 .kakaoLoginContainer {
   margin-top: 20px;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .kakaoButton {
@@ -156,4 +157,47 @@
   font-size: 16px;
   font-weight: 600;
   color: #3c1e1e; /* Kakao 로고와 어울리는 다크 레드 계열 */
+}
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
 }

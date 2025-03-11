@@ -7,7 +7,6 @@ import DaumPostcode from "react-daum-postcode";
 const SignUpStep2 = ({ setStep, step1Data }) => {
     const [image, setImage] = useState("https://d9k8tjx0yo0q5.cloudfront.net/image/user.png"); // 업로드할 파일 저장
     const [preview, setPreview] = useState(""); // 이미지 미리보기 URL
-    const [profileImage, setProfileImage] = useState(""); // 서버에서 반환된 이미지 URL 저장
     const [address, setAddress] = useState("");
     const [addressDetail, setAddressDetail] = useState("");
     const [addressExtra, setAddressExtra] = useState("");
@@ -49,57 +48,18 @@ const SignUpStep2 = ({ setStep, step1Data }) => {
         setIsOpen(false);
     }
 
-    // // 파일 업로드 및 미리보기 핸들러
-    // const fileUp = async (e) => {
-    //     const file = e.target.files[0];
-    //     if (!file) return;
-
-    //     // 파일 객체 상태 저장
-    //     setImage(file);
-
-    //     // FileReader를 사용하여 미리보기 URL 생성
-    //     const reader = new FileReader();
-    //     reader.onloadend = () => {
-    //     setPreview(reader.result);
-    //     };
-    //     reader.readAsDataURL(file);
-
-    //     // 서버 업로드 처리
-    //     const formData = new FormData();
-    //     formData.append("image", file);
-
-    //     try {
-    //     const result = await axios.post("/api/member/fileUp", formData);
-    //     // 서버에서 반환된 이미지 URL 저장
-    //     setProfileImage(`http://localhost:8070/profileImage/${result.data.image}`);
-    //     setImage(result.data.image);
-    //     console.log("image", image);
-    //     } catch (error) {
-    //     console.error("파일 업로드 실패:", error);
-    //     alert("파일 업로드에 실패했습니다.");
-    //     }
-    // };
-
-    
-    const onImageUpload = async (e) => {
+      const [newImage,setNewImage]=useState();
+      // 이미지 업로드
+      const onImageUpload = async (e) => {
         const file = e.target.files[0];
-        if (!file) return;
-        const formData = new FormData();
-        formData.append("image", file);
-        try {
-            if(image){
-                const response=await axios.delete('/api/music/deleteFile',{params:{file:image}});
-            }
-            let response = await axios.post("/api/music/imageUpload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-           setImage(response.data.image);
-        } catch (error) {
-            console.error("이미지 업로드 실패:", error);
-            alert("이미지 업로드 실패");
+        if (!file.type.startsWith("image/")) {
+          alert("이미지 파일만 업로드할 수 있습니다.");
+          return;
         }
-    };
-
+        setNewImage(file); // S3 업로드용 상태 저장
+        setPreview(URL.createObjectURL(file)); // 미리보기 URL 생성
+      };
+    
 
     const getFullEmail = (step1Data) => {
         if (!step1Data) return ""; // step1Data가 없으면 빈 문자열 반환
@@ -115,6 +75,24 @@ const SignUpStep2 = ({ setStep, step1Data }) => {
     // 최종 회원가입 처리
     const handleSubmit = async (e) => {
         e.preventDefault();
+        let imageUrl=image;
+        if (newImage) {
+            const formData = new FormData();
+            formData.append("image", newImage);
+            try {
+                if(image!='https://d9k8tjx0yo0q5.cloudfront.net/image/user.png'){
+                    const response=await axios.delete('/api/music/deleteFile',{params:{file:image}});
+                }
+                let response = await axios.post("/api/music/imageUpload", formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+                imageUrl=response.data.image;
+            } catch (error) {
+                console.error("이미지 업로드 실패:", error);
+                alert("이미지 업로드 실패");
+            }
+        }
+    
         
         const formData = new FormData();
         // Step1 데이터 추가
@@ -130,9 +108,9 @@ const SignUpStep2 = ({ setStep, step1Data }) => {
         formData.set('email', emailFull);
         // 이미지가 있을 경우 추가
         if (image) {
-            formData.append("image", image);
+            formData.append("image", imageUrl);
         }
-        formData.append("zipCode", zipCode);
+        formData.append("zipCode", zipCode||0);
         formData.append("address", address);
         formData.append("addressDetail", addressDetail);
         formData.append("addressExtra", addressExtra);
@@ -165,7 +143,7 @@ const SignUpStep2 = ({ setStep, step1Data }) => {
                 <label htmlFor="image">프로필 이미지 (선택)</label>
                 <input type="file" id="imageUpload" accept="image/*" onChange={onImageUpload} style={{ display: "none" }} />
                 <img
-                    src={ image || Userdefault} 
+                    src={ preview } 
                     alt="아티스트 이미지"
                     className={joinStyles.profilePreview}
                     onClick={() => document.getElementById("imageUpload").click()}

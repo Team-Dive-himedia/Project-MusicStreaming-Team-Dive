@@ -35,6 +35,8 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
             "ORDER BY COUNT(l) DESC")
     List<Playlist> findHotPlaylists(@Param("playlistType") Pagetype playlistType);
 
+    List<PlaylistDto> findByDivePick(boolean b);
+
 
 //    @Query("SELECT p FROM Playlist p WHERE p.playlistId = :")
 //    PlaylistDto findByPlaylistId2(int playlistId);
