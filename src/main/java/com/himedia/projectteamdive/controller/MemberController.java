@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/member")
 public class MemberController {
 
     @Autowired
