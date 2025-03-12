@@ -6,11 +6,13 @@ import com.himedia.projectteamdive.entity.Playcountlist;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PlaycountlistRepository  extends JpaRepository<Playcountlist, Integer> {
 
@@ -34,4 +36,13 @@ public interface PlaycountlistRepository  extends JpaRepository<Playcountlist, I
 
     @Query("select new com.himedia.projectteamdive.dto.MusicChartDto(p.music, sum(p.playCount)) from Playcountlist p where p.indate >= :chartDays group by p.music order by sum(p.playCount) desc")
     List<MusicChartDto> findTop100ByMusictoday(Timestamp chartDays, Pageable pageable);
+
+
+
+    @Query("SELECT p FROM Playcountlist p WHERE p.indate BETWEEN :start AND :end")
+    List<Playcountlist> findByIndateBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+
+
+
 }

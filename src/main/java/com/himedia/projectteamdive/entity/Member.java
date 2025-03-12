@@ -7,6 +7,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,4 +50,24 @@ public class Member {
     @Builder.Default
     private List<RoleName> memberRoleList = new ArrayList<RoleName>();
 
+
+    public int getBirthYear() {
+        try {
+            // 🔹 birth가 "yyyy-MM-dd" 형식인 경우, "-"로 분리 후 첫 번째 요소(연도)만 추출
+            return Integer.parseInt(this.birth.split("-")[0]);
+        } catch (Exception e) {
+            throw new RuntimeException("유효하지 않은 birth 값: " + this.birth);
+        }
+    }
+
+    public LocalDate getBirthDate() {
+        if (this.birth == null || this.birth.isEmpty()) {
+            return null; // 또는 적절한 기본값 처리
+        }
+        try {
+            return LocalDate.parse(this.birth, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (Exception e) {
+            throw new RuntimeException("유효하지 않은 birth 값: " + this.birth);
+        }
+    }
 }

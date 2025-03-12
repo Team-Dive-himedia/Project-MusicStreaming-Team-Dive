@@ -4,6 +4,7 @@ import com.himedia.projectteamdive.dto.*;
 import com.himedia.projectteamdive.entity.*;
 import com.himedia.projectteamdive.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -34,6 +35,8 @@ public class MusicService {
     AllpageRepository allr;
     @Autowired
     PlaycountlistRepository pcr;
+
+
 
     public void insertMusic(Music music) {
         Artist artist=arr.findByArtistId(music.getArtist().getArtistId());
@@ -74,6 +77,7 @@ public class MusicService {
 
     @Autowired
     MemberRepository memr;
+
     public void insertPlayList(String username, Playlist playlist) {
         Member member = memr.findByMemberId(username);
         Playlist playList= pr.save(new Playlist().builder()
@@ -214,8 +218,10 @@ public class MusicService {
         m.setTitleMusic(music.isTitleMusic());
         m.setContent(music.getContent());
     }
+
     @Autowired
     S3Service ss;
+
     public void deleteArtist(int artistId) {
         Artist artist=arr.findByArtistId(artistId);
         List<Album>albumList=artist.getAlbums();
@@ -408,8 +414,10 @@ public class MusicService {
 
         return playlist.map(PlaylistDto::new).orElse(null);
     }
+
     @Autowired
     LikesRepository lr;
+
     public HashMap<String, Object> getTop3() {
         HashMap<String, Object> result=new HashMap<>();
         List<Object[]>artists= lr.findLikesRanking(Pagetype.ARTIST);
@@ -439,9 +447,9 @@ public class MusicService {
                 musicList.add(new MusicDto(mr.findByMusicId(id)));
             }
         }
-        result.put("artist",artistList);
-        result.put("album",albumList);
-        result.put("music",musicList);
+        result.put("artist", artistList);
+        result.put("album", albumList);
+        result.put("music", musicList);
         return result;
     }
 
@@ -454,7 +462,7 @@ public class MusicService {
         if (latestMusicIds == null || latestMusicIds.isEmpty()) {
             result.put("latestMusicList", new ArrayList<>()); // 빈 리스트 반환
             return result;
-        }else {
+        } else {
             List<MusicDto> latestMusicList = mr.getMusicByIds(latestMusicIds);
             result.put("latestMusicList", latestMusicList);
         }
@@ -463,11 +471,11 @@ public class MusicService {
 
     public HashMap<String, Object> getLatestAlbumList() {
         HashMap<String, Object> result = new HashMap<>();
-        List <Integer> latestAlbumIds = ar.getLatestAlbumIds(PageRequest.of(0,9));
-        if(latestAlbumIds == null || latestAlbumIds.isEmpty()) {
+        List<Integer> latestAlbumIds = ar.getLatestAlbumIds(PageRequest.of(0, 9));
+        if (latestAlbumIds == null || latestAlbumIds.isEmpty()) {
             result.put("latestAlbumList", new ArrayList<>());
             return result;
-        }else{
+        } else {
             List<AlbumDto> latestAlbumList = ar.getAlbumByIds(latestAlbumIds);
             result.put("latestAlbumList", latestAlbumList);
         }
@@ -477,11 +485,11 @@ public class MusicService {
 
     public HashMap<String, Object> getLatestPlayList() {
         HashMap<String, Object> result = new HashMap<>();
-        List <Integer> latestPlayListIds = pr.getLatestPlayListIds(PageRequest.of(0,9));
-        if(latestPlayListIds == null || latestPlayListIds.isEmpty()) {
+        List<Integer> latestPlayListIds = pr.getLatestPlayListIds(PageRequest.of(0, 9));
+        if (latestPlayListIds == null || latestPlayListIds.isEmpty()) {
             result.put("latestPlayListList", new ArrayList<>());
             return result;
-        }else{
+        } else {
             List<PlaylistDto> latestPlayListofList = pr.getPlaylistByIds(latestPlayListIds)
                     .stream()
                     .map(PlaylistDto::new)
@@ -502,6 +510,7 @@ public class MusicService {
     }
 
     public HashMap<String, Object> getMusicForMood(String mood) {
+
         List<Music> musicList = mr.findByMood(mood);
 
 
@@ -552,4 +561,21 @@ public class MusicService {
         result.put("divePick", list);
         return result;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

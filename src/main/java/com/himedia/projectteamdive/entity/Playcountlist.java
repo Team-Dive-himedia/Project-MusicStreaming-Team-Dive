@@ -51,4 +51,5 @@ public class Playcountlist {
             this.indate = midnightTimestamp;
         }
     }
+
 }

@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { motion } from "framer-motion";
 import Dashboard from "./Component/page/DashBoard";
+import StreamingChart from "./Component/page/dashboard/StreamingChart";
 import SideBar from "./Component/SideBar";
 import NavigationBar from "./Component/NavigationBar";
 import User from "./Component/page/user/User";
@@ -45,7 +46,7 @@ const App = () => {
                                 <Route path="/memberShip" element={<MemberShip />} />
                                 <Route path="/updateMemberShip/:membershipId" element={<UpdateMemberShip />} />
                                 <Route path="/addMemberShip" element={<AddMemberShip />}/>
-                                                                
+                                <Route path="/StreamingChart" element={<StreamingChart />} />                                        
                                 <Route path="/musicController" element={<MusicController />}>
                                     <Route path="music" element={<Music />} />
                                     <Route path="artist" element={<Artist />} />

@@ -128,7 +128,7 @@ export default function Player() {
           .then(() => setPlayCounts({}))
           .catch(err => console.error("Error sending play counts:", err));
       }
-    }, 600000);
+    }, 60000);
     return () => clearInterval(interval);
   }, [playCounts]);
 
