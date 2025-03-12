@@ -326,6 +326,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         }
 
+        if(path.startsWith("/music/getPlaylistPage")){
+            return true;
+        }
+
 
 
 
