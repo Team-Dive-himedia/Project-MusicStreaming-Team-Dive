@@ -17,24 +17,25 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
 
   // ✅ startDate 및 endDate 계산 (일별일 때는 항상 1일부터 31일까지)
   const { startDate, endDate } = useMemo(() => {
-    const endDate = new Date(currentDate);
+    let startDate, endDate;
     
-
-    let startDate;
-
 
     switch (viewType) {
       case "daily":
-        startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1); // 📌 매월 1일부터
+        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2); // 📌 매월 1일부터
+        endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, );
         break;
       case "monthly":
-        startDate = new Date(endDate.getFullYear(), 0, 1);
+        startDate = new Date(currentDate.getFullYear(), 0, 2);
+        endDate = new Date(currentDate.getFullYear(), 11, 31);
         break;
       case "yearly":
-        startDate = new Date(endDate.getFullYear() - 10, 0, 1);
+        startDate = new Date(currentDate.getFullYear() - 10, 0, 2);
+        endDate = new Date(currentDate.getFullYear(), 11, 31);
         break;
       default:
-        startDate = new Date(endDate);
+        startDate = new Date(currentDate);
+        endDate = new Date(currentDate);
     }
 
     return { startDate, endDate };
@@ -54,7 +55,7 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
   // ✅ 데이터 가져오기
   useEffect(() => {
     fetchStreamingData();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, viewType]);
 
   
 
@@ -65,10 +66,13 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
 
       const startDateStr = startDate.toISOString().split("T")[0];
       const endDateStr = endDate.toISOString().split("T")[0];
-
+      
       console.log(`📅 요청: ${viewType} | 기간: ${startDateStr} ~ ${endDateStr}`);
 
       const response = await jaxios.get( `/api/stats/daily?type=${viewType}&startDate=${startDateStr}&endDate=${endDateStr}`);
+
+      
+
 
       console.log(`✅ ${viewType} 데이터:`, response.data);
 
@@ -77,9 +81,7 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
         totalPlayCount: item.totalPlayCount ?? 0,
       }));
 
-      if (viewType === "daily") {
-        stats = ensure31Days(stats);
-      }
+      stats = ensureDataLength(stats);
 
       setStreamingStats(stats);
     } catch (error) {
@@ -88,6 +90,19 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
       setLoading(false);
     }
   };
+
+  const ensureDataLength = (data) => {
+    if (viewType === "daily") {
+        return ensure31Days(data); // ✅ 31개 데이터 유지
+    } else if (viewType === "monthly") {
+        return ensure12Months(data); // ✅ 12개월 데이터 유지
+    } else if (viewType === "yearly") {
+        return ensure10Years(data); // ✅ 10년 데이터 유지
+    }
+    return data;
+};
+
+
 
   // ✅ 31개 데이터 강제 유지
   const ensure31Days = (data) => {
@@ -107,6 +122,41 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
       });
     }
 
+    return result;
+  };
+
+
+  // ✅ 12개월 유지 (월별)
+  const ensure12Months = (data) => {
+    let result = [];
+    for (let i = 0; i < 12; i++) {
+        const month = i + 1;
+        const dateStr = `${currentDate.getFullYear()}-${month.toString().padStart(2, "0")}-01`;
+
+        const existingData = data.find((item) => item.date.startsWith(`${currentDate.getFullYear()}-${month.toString().padStart(2, "0")}`));
+        result.push({
+            date: dateStr,
+            totalPlayCount: existingData ? existingData.totalPlayCount : 0,
+        });
+    }
+    return result;
+  };
+
+
+  // ✅ 10년 유지 (연도별)
+  const ensure10Years = (data) => {
+    let result = [];
+    const startYear = currentDate.getFullYear() - 9;
+    for (let i = 0; i < 10; i++) {
+        const year = startYear + i;
+        const dateStr = `${year}-01-01`;
+
+        const existingData = data.find((item) => item.date.startsWith(`${year}`));
+        result.push({
+            date: dateStr,
+            totalPlayCount: existingData ? existingData.totalPlayCount : 0,
+        });
+    }
     return result;
   };
 
@@ -172,6 +222,7 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
 
 
     return (
+      <div className="background" >
       <div className={`chart-container ${isSmall ? "small-chart" : ""}`} onClick={isSmall ? onClick : undefined}>
 
       {/* ✅ 버튼 영역 (isSmall 상태일 때 숨김) */}
@@ -197,7 +248,7 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
   
       <div className="chart-wrapper">
           <h2 className="chart-title">{chartTitle}</h2>
-          <ResponsiveContainer width="100%" height={isSmall ? 250 : 300} shouldUpdate={false}>
+          <ResponsiveContainer width="100%" height={isSmall ? 250 : 300}>
             {loading ? <p className="loading-text">📊 데이터 로딩 중...</p> : (
               <BarChart data={streamingStats}>
                 <XAxis dataKey="date" tick={{ fontSize: 12 }} tickFormatter={formatXAxis} />
@@ -209,8 +260,9 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
             )}
           </ResponsiveContainer>
         </div>
-        <GenderAgeChart date={currentDate} viewType={viewType} />
+        {!isSmall && (<GenderAgeChart date={currentDate} viewType={viewType} />)}
     </div>
+    </div>        
     );
 };
 

@@ -25,8 +25,34 @@ const GenderAgeChart = ({ date, viewType}) => {
 
         const response = await jaxios.get(`/api/stats/detail?type=${viewType}&date=${dateStr}`);
         console.log(`✅ ${viewType} 상세 데이터:`, response.data);
+
+        const aggregateStats = (dataArray) => {
+            return dataArray.reduce((acc, item) => {
+                acc.malePlayCount += item.malePlayCount ?? 0;
+                acc.femalePlayCount += item.femalePlayCount ?? 0;
+                acc.unknownGenderPlayCount += item.unknownGenderPlayCount ?? 0;
+                acc.teenPlayCount += item.teenPlayCount ?? 0;
+                acc.twentiesPlayCount += item.twentiesPlayCount ?? 0;
+                acc.thirtiesPlayCount += item.thirtiesPlayCount ?? 0;
+                acc.fortiesPlayCount += item.fortiesPlayCount ?? 0;
+                acc.fiftiesPlusPlayCount += item.fiftiesPlusPlayCount ?? 0;
+                return acc;
+            }, {
+                malePlayCount: 0,
+                femalePlayCount: 0,
+                unknownGenderPlayCount: 0,
+                teenPlayCount: 0,
+                twentiesPlayCount: 0,
+                thirtiesPlayCount: 0,
+                fortiesPlayCount: 0,
+                fiftiesPlusPlayCount: 0
+            });
+        };
+
     
-        const data = Array.isArray(response.data) ? response.data[0] : response.data;
+        const data = Array.isArray(response.data) ? aggregateStats(response.data) : response.data;
+
+
     
 
 

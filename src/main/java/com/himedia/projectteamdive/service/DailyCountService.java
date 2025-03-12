@@ -147,9 +147,18 @@ public class DailyCountService {
 
     // ✅ 특정 기간의 일별 스트리밍 통계 조회
     public List<DailyCountDto> getDailyStreamingStats(LocalDate startDate, LocalDate endDate) {
-        List<DailyCount> statsList = dcr.findByDateBetween(startDate, endDate);
-        return statsList.stream().map(DailyCountDto::new).collect(Collectors.toList());
+        List<DailyCountDto> dailyStats = new ArrayList<>();
+
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            int totalPlayCount = dcr.sumTotalPlayCountByDate(currentDate).orElse(0);
+            dailyStats.add(new DailyCountDto(currentDate, totalPlayCount));
+            currentDate = currentDate.plusDays(1);
+        }
+
+        return dailyStats;
     }
+
 
 
 

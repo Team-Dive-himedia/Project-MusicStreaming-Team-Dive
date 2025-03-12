@@ -23,7 +23,6 @@ const Dashboard = () => {
 
         <h1 className="dashboard-title">📊 관리자 대시보드</h1>
 
-
           <StreamingChart isSmall={true} onClick={handleChartClick} />
           
       
