@@ -4,6 +4,7 @@ import com.himedia.projectteamdive.dto.DailyCountDto;
 import com.himedia.projectteamdive.service.DailyCountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -14,19 +15,43 @@ import java.util.List;
 public class DailyCountController {
 
     @Autowired
-    private DailyCountService dailyCountService;
+    private DailyCountService dcs;
+
+
+
+
+
 
     @GetMapping("/daily")
     public List<DailyCountDto> getStreamingStats(
-            @RequestParam String type, // "daily", "monthly", "yearly"
+            @RequestParam String type,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
         System.out.println("📊 요청 타입: " + type + " | 기간: " + startDate + " ~ " + endDate);
-        return dailyCountService.getStreamingStats(type, startDate, endDate);
+        return dcs.getStreamingStats(type, startDate, endDate);
     }
 
+    /**
+     * ✅ 일별, 월별, 연도별 통계 상세 조회 API
+     * @param type "daily" | "monthly" | "yearly"
+     * @param date 기준 날짜 (yyyy-MM-dd)
+     * @return DailyCountDto 리스트
+     */
 
+
+    @GetMapping("/detail")
+    public ResponseEntity<?> getDetailStats(
+            @RequestParam String type,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        try {
+            List<DailyCountDto> stats = dcs.getDetailStats(type, date);
+            return ResponseEntity.ok(stats);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("❌ 잘못된 요청: " + e.getMessage());
+        }
+    }
 
 
 
@@ -37,7 +62,7 @@ public class DailyCountController {
 
         System.out.println("세부 데이터 조회 요청: " + date);
 
-        List<DailyCountDto> statsList = dailyCountService.getDailyDetail(date);
+        List<DailyCountDto> statsList = dcs.getDailyDetail(date);
 
         if (statsList.isEmpty()) {
             System.out.println("해당 날짜의 데이터가 없습니다: " + date);

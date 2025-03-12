@@ -41,4 +41,8 @@ public interface PlaycountlistRepository  extends JpaRepository<Playcountlist, I
 
     @Query("SELECT p FROM Playcountlist p WHERE p.indate BETWEEN :start AND :end")
     List<Playcountlist> findByIndateBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+
+
+
 }

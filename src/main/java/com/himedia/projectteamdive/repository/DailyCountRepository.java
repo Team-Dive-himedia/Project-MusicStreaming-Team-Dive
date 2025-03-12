@@ -31,4 +31,5 @@ public interface DailyCountRepository extends JpaRepository<DailyCount, Long> {
     @Query("SELECT d FROM DailyCount d WHERE d.date = :date")
     List<DailyCount> findAllByDate(@Param("date") LocalDate date);
 
+    Optional<DailyCount> findByDate(LocalDate yesterday);
 }

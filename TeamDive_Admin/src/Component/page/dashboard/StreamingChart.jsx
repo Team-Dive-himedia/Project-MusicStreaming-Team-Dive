@@ -1,7 +1,7 @@
 import jaxios from "../../../util/JwtUtil";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useMemo, useRef  } from "react";
-import { Card, CardContent } from "../../../ui/card";
+import GenderAgeChart from "./GenderAgeChart";
+import { useState, useEffect, useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import "../../../style/StreamingChart.scss";
 
@@ -77,7 +77,6 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
         totalPlayCount: item.totalPlayCount ?? 0,
       }));
 
-      // ✅ 일별일 때 31개로 맞추기
       if (viewType === "daily") {
         stats = ensure31Days(stats);
       }
@@ -210,6 +209,7 @@ const StreamingChart = ({ isSmall = false, onClick  }) => {
             )}
           </ResponsiveContainer>
         </div>
+        <GenderAgeChart date={currentDate} viewType={viewType} />
     </div>
     );
 };

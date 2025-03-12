@@ -45,5 +45,8 @@ public class DailyCount {
     @Column(name ="fifties_plus_play_count" )
     private int fiftiesPlusPlayCount;
 
+    @Column(name ="unknown_gender_play_count" )
+    private int unknownGenderPlayCount = 0;
+
 
 }

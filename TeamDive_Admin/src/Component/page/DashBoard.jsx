@@ -1,4 +1,5 @@
 import StreamingChart from "./dashboard/StreamingChart";
+import GenderAgeChart from "./dashboard/GenderAgeChart";
 import { useNavigate } from "react-router-dom";
 import "../../style/dashboard.scss";
 
@@ -24,6 +25,7 @@ const Dashboard = () => {
 
 
           <StreamingChart isSmall={true} onClick={handleChartClick} />
+          
       
       </div>
     </div>

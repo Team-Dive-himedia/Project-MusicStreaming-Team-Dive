@@ -198,7 +198,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         }
 
-        if(path.startsWith("/api/daily/stats")){
+        if(path.startsWith("/api/stats/daily")){
+            return true;
+        }
+
+        if(path.startsWith("/api/stats/detail")){
             return true;
         }
 
@@ -351,9 +355,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         }
 
-        if(path.startsWith("/stats/monthly")){
+        if(path.startsWith("/stats/detail")){
             return true;
         }
+
+
 
         if(path.startsWith("/stats/dailyDetail")){
             return true;

@@ -15,22 +15,24 @@ import java.util.Map;
 public class DailyCountDto {
     private Long id;
     private LocalDate date;
-    private Integer totalPlayCount;
-    private Integer malePlayCount;
-    private Integer femalePlayCount;
-    private Integer teenPlayCount;
-    private Integer twentiesPlayCount;
-    private Integer thirtiesPlayCount;
-    private Integer fortiesPlayCount;
-    private Integer fiftiesPlusPlayCount;
+    private int totalPlayCount = 0;
+    private int malePlayCount = 0;
+    private int femalePlayCount = 0;
+    private int unknownGenderPlayCount = 0;
+    private int teenPlayCount = 0;
+    private int twentiesPlayCount = 0;
+    private int thirtiesPlayCount = 0;
+    private int fortiesPlayCount = 0;
+    private int fiftiesPlusPlayCount = 0;
 
-    private Map<String, Integer> genrePlayCounts;
+//    private Map<String, Integer> genrePlayCounts;
 
     public DailyCountDto(DailyCount stats) {
         this.id = stats.getId();
         this.date = stats.getDate();
         this.totalPlayCount = stats.getTotalPlayCount();
         this.malePlayCount = stats.getMalePlayCount();
+        this.unknownGenderPlayCount = stats.getUnknownGenderPlayCount();
         this.femalePlayCount = stats.getFemalePlayCount();
         this.teenPlayCount = stats.getTeenPlayCount();
         this.twentiesPlayCount = stats.getTwentiesPlayCount();
