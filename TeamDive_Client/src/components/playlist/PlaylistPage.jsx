@@ -39,7 +39,7 @@ const PlaylistPage = () => {
 
   const rotateGif = () => (
     <img
-      src="/public/icon/rotate.gif"
+      src="https://d9k8tjx0yo0q5.cloudfront.net/icon/rotate.gif"
       alt="rotate icon"
       className={styles.rotateIcon}
     />
